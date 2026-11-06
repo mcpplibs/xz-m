@@ -1,0 +1,4 @@
+[template]
+description  = "Compression with import mcpplibs.mwrap.xz: a text packed into an .xz stream with a CRC-64 and unpacked again"
+default      = true
+post_message = "Run `mcpp run`, or `mcpp run -- <file>` to pack a file of your own."

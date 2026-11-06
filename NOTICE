@@ -1,0 +1,14 @@
+xz-m: C++ module wrapper
+Copyright (c) 2026 mcpp-community contributors
+
+The wrapper contributions are licensed under the Apache License, Version 2.0.
+Upstream code, copied interfaces and dependencies retain their original
+licenses and copyright notices. liblzma of XZ Utils is distributed under the
+BSD Zero Clause License (0BSD):
+
+  Copyright (C) The XZ Utils authors and contributors
+
+Its original README and licenses are retained in upstream/xz/. The library
+itself is provided by compat.xz from the same release, and the macros of
+include/mwrap/xz/macros.hpp are upstream's definitions. Provenance and
+checksums are recorded in upstream/documents.json.

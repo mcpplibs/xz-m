@@ -1,0 +1,22 @@
+{
+  "upstream": "https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.gz",
+  "upstream_sha256": "3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0",
+  "pruning": "Nothing of XZ Utils is vendored: liblzma is compat.xz 5.8.3's, from the same tarball, and the macros of include/mwrap/xz/macros.hpp are upstream's definitions, written out by tools/generate.py. Its README and licenses are retained here. The conformance run decodes the release's tests/files with compat.xz, from the tarball downloaded at test time.",
+  "documents": [
+    {
+      "path": "upstream/xz/README",
+      "source": "https://github.com/tukaani-project/xz/blob/v5.8.3/README",
+      "sha256": "63835489293d61f417043b97bad206447c390e007605ddff97fc70a31e9d6d55"
+    },
+    {
+      "path": "upstream/xz/COPYING",
+      "source": "https://github.com/tukaani-project/xz/blob/v5.8.3/COPYING",
+      "sha256": "616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8"
+    },
+    {
+      "path": "upstream/xz/COPYING.0BSD",
+      "source": "https://github.com/tukaani-project/xz/blob/v5.8.3/COPYING.0BSD",
+      "sha256": "0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1"
+    }
+  ]
+}
