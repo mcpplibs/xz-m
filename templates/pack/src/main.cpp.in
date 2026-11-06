@@ -1,0 +1,53 @@
+// {{project.name}}: liblzma through import mcpplibs.mwrap.xz. The functions, types
+// and enumerators are liblzma's own names; the constants are in
+// mcpplibs::mwrap::xz::macros, and LZMA_STREAM_INIT, a macro, comes from
+// <mwrap/xz/macros.hpp>.
+#include <mwrap/xz/macros.hpp>
+import std;
+import mcpplibs.mwrap.xz;
+
+namespace x = mcpplibs::mwrap::xz::macros;
+
+// Runs a coder over `in` to the end of the stream.
+static std::vector<std::uint8_t> code(lzma_stream& s, std::span<const std::uint8_t> in, lzma_ret& rc)
+{
+    std::vector<std::uint8_t> out;
+    s.next_in = in.data();
+    s.avail_in = in.size();
+    do {
+        std::uint8_t chunk[16384];
+        s.next_out = chunk;
+        s.avail_out = sizeof chunk;
+        rc = lzma_code(&s, LZMA_FINISH);
+        out.insert(out.end(), chunk, chunk + (sizeof chunk - s.avail_out));
+    } while (rc == LZMA_OK);
+    lzma_end(&s);
+    return out;
+}
+
+int main(int argc, char** argv)
+{
+    std::string text;
+    if (argc > 1) {
+        std::ifstream file(argv[1], std::ios::binary);
+        text.assign(std::istreambuf_iterator<char>(file), {});
+    } else {
+        for (int i = 0; i < 300; ++i) text += std::format("liblzma through a C++ module, row {}\n", i % 12);
+    }
+    const std::span bytes(reinterpret_cast<const std::uint8_t*>(text.data()), text.size());
+
+    lzma_ret rc;
+    lzma_stream enc = LZMA_STREAM_INIT;
+    if (lzma_easy_encoder(&enc, x::LZMA_PRESET_DEFAULT, LZMA_CHECK_CRC64) != LZMA_OK) return 1;
+    const auto packed = code(enc, bytes, rc);
+    if (rc != LZMA_STREAM_END) return 1;
+
+    lzma_stream dec = LZMA_STREAM_INIT;
+    if (lzma_stream_decoder(&dec, std::numeric_limits<std::uint64_t>::max(), 0) != LZMA_OK) return 1;
+    const auto unpacked = code(dec, packed, rc);
+    const bool intact = rc == LZMA_STREAM_END && std::ranges::equal(unpacked, bytes);
+
+    std::println("liblzma {}: {} bytes -> {} bytes (.xz, CRC-64 {:016x}), unpacked {}", lzma_version_string(),
+                 text.size(), packed.size(), lzma_crc64(bytes.data(), bytes.size(), 0), intact ? "intact" : "DIFFERENT");
+    return intact ? 0 : 1;
+}

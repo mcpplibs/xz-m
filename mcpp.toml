@@ -1,0 +1,47 @@
+# Module wrapper; upstream API preserved. Policy: mcpp-index/docs/mwrap.md.
+[package]
+namespace   = "mcpplibs.mwrap"
+name        = "xz"
+version     = "5.8.3"
+description = "XZ Utils 5.8.3 liblzma C++ modules for mcpp (import mcpplibs.mwrap.xz;): .xz and .lzma streams, filters, blocks, indexes and checks over compat.xz, with the constants of lzma.h as C++ constants"
+license     = "Apache-2.0"
+authors     = ["mcpp-community"]
+repo        = "https://github.com/mcpplibs/xz-m"
+platforms   = ["linux", "macos", "windows"]
+
+[targets.xz]
+kind = "lib"
+
+[build]
+sources      = ["src/*.cppm"]
+# <mwrap/xz/macros.hpp>: LZMA_STREAM_INIT and the other macros that are not constants.
+include_dirs = ["include"]
+
+[dependencies]
+compat.xz = "5.8.3"
+
+[test]
+discover = ["tests/*.cpp"]
+
+[package.metadata.mwrap]
+upstream-version = "5.8.3"
+
+[[runtime.deploy]]
+from = "LICENSE"
+to   = "licenses/xz"
+
+[[runtime.deploy]]
+from = "NOTICE"
+to   = "licenses/xz"
+
+[[runtime.deploy]]
+from = "upstream/xz/README"
+to   = "licenses/xz/upstream/xz"
+
+[[runtime.deploy]]
+from = "upstream/xz/COPYING"
+to   = "licenses/xz/upstream/xz"
+
+[[runtime.deploy]]
+from = "upstream/xz/COPYING.0BSD"
+to   = "licenses/xz/upstream/xz"
