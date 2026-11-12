@@ -79,6 +79,13 @@ jobs:
       - name: Tests (buffers, streams, filter chains, .lzma, checks, errors, the constants, every function linked, header mixing)
         run: mcpp test $TARGET
 
+      # The release profile compiles a function to a section of its own and the link
+      # collects the unreferenced ones. 5.8.3 passed every test in the dev profile on
+      # Windows and faulted here: the functions were reached through import slots the
+      # linker made, and collected.
+      - name: Tests, where the link collects unreferenced sections (the release profile)
+        run: mcpp test --profile release $TARGET
+
       - name: Export audit (the headers as clang reads them on this host)
         if: startsWith(matrix.toolchain, 'llvm')
         run: python3 tools/generate.py --check

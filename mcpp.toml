@@ -2,7 +2,7 @@
 [package]
 namespace   = "mcpplibs.mwrap"
 name        = "xz"
-version     = "5.8.3"
+version     = "5.8.3.1"
 description = "XZ Utils 5.8.3 liblzma C++ modules for mcpp (import mcpplibs.mwrap.xz;): .xz and .lzma streams, filters, blocks, indexes and checks over compat.xz, with the constants of lzma.h as C++ constants"
 license     = "Apache-2.0"
 authors     = ["mcpp-community"]

@@ -1,5 +1,11 @@
 // The header and the module in one translation unit: the same entities, so a
 // stream set up through one spelling is ended through the other.
+//
+// A unit that includes the upstream header itself shares the configuration compat.xz
+// is compiled with (<mwrap/xz/macros.hpp> states it too): the library is static.
+#ifndef LZMA_API_STATIC
+#define LZMA_API_STATIC
+#endif
 #include <lzma.h>
 import std;
 import mcpplibs.mwrap.xz;

@@ -2,6 +2,9 @@
 // expands even in a qualified name, so the values of the headers are taken under other
 // names and the macros undefined before the mapped names are used. Written by
 // tools/generate.py.
+#ifndef LZMA_API_STATIC
+#define LZMA_API_STATIC
+#endif
 #include <lzma.h>
 
 namespace header {

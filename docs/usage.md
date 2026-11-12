@@ -54,3 +54,12 @@ values under other names and `#undef` the macros before naming the constants
 The package depends on `compat.xz` 5.8.3, which builds liblzma from the release
 sources with the target's toolchain. A program that imports the module links
 that library; it does not look for a system liblzma.
+
+The library is static, and the module reads `lzma.h` with `LZMA_API_STATIC`
+defined (5.8.3.1). On Windows the header otherwise declares every function
+imported from a DLL, and a unit that read it so calls through `__imp_lzma_*`.
+A unit that includes `lzma.h` itself beside the module defines
+`LZMA_API_STATIC` before it, or includes `<mwrap/xz/macros.hpp>` first, which
+defines it. 5.8.3 did not: its tests passed in the dev profile, and a program
+built in the release profile, where the link collects unreferenced sections,
+faulted at its first call into the library on Windows.

@@ -24,7 +24,7 @@ C++ 常量。每次 CI 都用同一份库解码上游自己的测试文件。
 ## 快速开始
 
 ```sh
-mcpp new pack --template mcpplibs.mwrap.xz@5.8.3
+mcpp new pack --template mcpplibs.mwrap.xz@5.8.3.1
 cd pack
 mcpp run
 ```
@@ -33,7 +33,7 @@ mcpp run
 
 ```toml
 [dependencies]
-"mcpplibs.mwrap.xz" = "5.8.3"
+"mcpplibs.mwrap.xz" = "5.8.3.1"
 ```
 
 ```cpp

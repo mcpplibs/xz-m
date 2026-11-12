@@ -131,6 +131,10 @@ def render(cfg, surface, constants, types, kept):
               '// The upstream header included after this one redefines these macros.',
               '// Written by tools/generate.py.',
               f'#ifndef {guard}', f'#define {guard}']
+    if cfg.get('defines'):
+        header += ['', '// The configuration the compat package compiles with: a unit that includes the',
+                   '// upstream header itself shares it by including this header first.']
+        header += [f'#ifndef {d}\n#define {d}\n#endif' for d in cfg['defines']]
     for n in sorted(kept):
         # A module-only unit has no NULL macro; in C++ nullptr is its meaning.
         body = re.sub(r'\bNULL\b', 'nullptr', qualify(kept[n]['body'], set(mapped), f'{scope}::macros'))
@@ -165,8 +169,19 @@ def render(cfg, surface, constants, types, kept):
               '    const void* volatile functions[] = {']
     linked += [f'        reinterpret_cast<const void*>(&{n}),' for n in functions]
     linked += ['    };', '    int missing = 0;', '    for (const void* f : functions) missing += f == nullptr;',
-               f'    std::println("{len(functions)} functions linked, {{}} null", missing);',
-               '    return missing != 0;', '}']
+               '    // The functions are not at one address. A link that resolved them through slots it',
+               '    // made for them and then dropped the functions leaves every slot the same address,',
+               '    // which is not null. (Two functions of identical code may share one where the',
+               '    // linker folds them, so only a run of more than half is read as that.)',
+               '    std::vector<const void*> sorted(std::begin(functions), std::end(functions));',
+               '    std::ranges::sort(sorted, std::less<const void*>{});',
+               '    std::size_t run = 1, longest = 1;',
+               '    for (std::size_t i = 1; i < sorted.size(); ++i) {',
+               '        run = sorted[i] == sorted[i - 1] ? run + 1 : 1;',
+               '        longest = std::max(longest, run);',
+               '    }',
+               f'    std::println("{len(functions)} functions linked, {{}} null, at most {{}} at one address", missing, longest);',
+               '    return missing != 0 || longest > sorted.size() / 2;', '}']
     join = lambda lines: '\n'.join(lines) + '\n'
     return {f'src/{name}.cppm': join(module), 'src/macros.cppm': join(macros),
             f'include/mwrap/{name}/macros.hpp': join(header), 'tests/macros.cpp': join(test),
