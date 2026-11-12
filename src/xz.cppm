@@ -3,6 +3,9 @@
 // upstream declares it; the root also re-exports the macro mapping. The implementation
 // is compat.xz 5.8.3. Written by tools/generate.py from the headers.
 module;
+#ifndef LZMA_API_STATIC
+#define LZMA_API_STATIC
+#endif
 #include <lzma.h>
 
 export module mcpplibs.mwrap.xz;

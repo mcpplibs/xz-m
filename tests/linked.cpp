@@ -120,6 +120,17 @@ int main()
     };
     int missing = 0;
     for (const void* f : functions) missing += f == nullptr;
-    std::println("110 functions linked, {} null", missing);
-    return missing != 0;
+    // The functions are not at one address. A link that resolved them through slots it
+    // made for them and then dropped the functions leaves every slot the same address,
+    // which is not null. (Two functions of identical code may share one where the
+    // linker folds them, so only a run of more than half is read as that.)
+    std::vector<const void*> sorted(std::begin(functions), std::end(functions));
+    std::ranges::sort(sorted, std::less<const void*>{});
+    std::size_t run = 1, longest = 1;
+    for (std::size_t i = 1; i < sorted.size(); ++i) {
+        run = sorted[i] == sorted[i - 1] ? run + 1 : 1;
+        longest = std::max(longest, run);
+    }
+    std::println("110 functions linked, {} null, at most {} at one address", missing, longest);
+    return missing != 0 || longest > sorted.size() / 2;
 }

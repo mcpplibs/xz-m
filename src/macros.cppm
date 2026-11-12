@@ -3,6 +3,9 @@
 // the macro where the module is built (a named module cannot export a macro). The
 // other macros are in <mwrap/xz/macros.hpp>. Written by tools/generate.py.
 module;
+#ifndef LZMA_API_STATIC
+#define LZMA_API_STATIC
+#endif
 #include <lzma.h>
 
 // The values, taken under other names while the macros are defined.

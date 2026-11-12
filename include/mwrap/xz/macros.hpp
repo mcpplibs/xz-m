@@ -9,6 +9,12 @@
 #ifndef MWRAP_XZ_MACROS_HPP
 #define MWRAP_XZ_MACROS_HPP
 
+// The configuration the compat package compiles with: a unit that includes the
+// upstream header itself shares it by including this header first.
+#ifndef LZMA_API_STATIC
+#define LZMA_API_STATIC
+#endif
+
 #ifndef LZMA_STREAM_INIT
 #define LZMA_STREAM_INIT { nullptr, 0, 0, nullptr, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, 0, 0, LZMA_RESERVED_ENUM, LZMA_RESERVED_ENUM }
 #endif
