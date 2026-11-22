@@ -27,7 +27,7 @@ upstream's own test files with the same library.
 ## Getting started
 
 ```sh
-mcpp new pack --template mcpplibs.mwrap.xz@5.8.3.1
+mcpp new pack --template mcpplibs.mwrap.xz@5.8.3.2
 cd pack
 mcpp run
 ```
@@ -37,7 +37,7 @@ it, and prints the sizes and the checksum.
 
 ```toml
 [dependencies]
-"mcpplibs.mwrap.xz" = "5.8.3.1"
+mcpplibs.mwrap.xz = "5.8.3.2"
 ```
 
 ```cpp
